@@ -52,14 +52,15 @@ type ImgFolder interface {
 	Folders() map[string]ImgFolder
 	Images() []ImgMeta
 	Find(path string) ImgFolder
+	RelPath() string
 }
 
 type imgFolder struct {
 	basepath string
-	name    string
-	path    string
-	folders map[string]ImgFolder
-	images  []ImgMeta
+	name     string
+	path     string
+	folders  map[string]ImgFolder
+	images   []ImgMeta
 }
 
 func (im *imgFolder) RelPath() string {
@@ -101,9 +102,9 @@ func (im *imgFolder) Find(path string) ImgFolder {
 func scanFolder(path string, basepath string, name string) (ImgFolder, error) {
 	re := &imgFolder{
 		basepath: basepath,
-		path:    path,
-		folders: make(map[string]ImgFolder),
-		name: name,
+		path:     path,
+		folders:  make(map[string]ImgFolder),
+		name:     name,
 	}
 	folder, err := os.Open(path)
 	if err != nil {
