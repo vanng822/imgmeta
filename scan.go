@@ -55,10 +55,16 @@ type ImgFolder interface {
 }
 
 type imgFolder struct {
+	basepath string
 	name    string
 	path    string
 	folders map[string]ImgFolder
 	images  []ImgMeta
+}
+
+func (im *imgFolder) RelPath() string {
+	rel, _ := filepath.Rel(im.basepath, im.path)
+	return rel
 }
 
 func (im *imgFolder) Name() string {
@@ -94,6 +100,7 @@ func (im *imgFolder) Find(path string) ImgFolder {
 
 func scanFolder(path string, basepath string, name string) (ImgFolder, error) {
 	re := &imgFolder{
+		basepath: basepath,
 		path:    path,
 		folders: make(map[string]ImgFolder),
 		name: name,
