@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-var supportedExts = regexp.MustCompile(".+(jpg|png)$")
+var supportedExts = regexp.MustCompile(".+(?i)(jpg|png)$")
 
 type ImgMeta interface {
 	Name() string
