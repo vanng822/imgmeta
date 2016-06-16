@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-var supportedExts = regexp.MustCompile(".+(?i)(jpg|png)$")
+var supportedExts = regexp.MustCompile(".+\\.(?i)(jpg|png)$")
 
 type ImgMeta interface {
 	Name() string
@@ -116,6 +116,10 @@ func scanFolder(path string, basepath string, name string) (ImgFolder, error) {
 		return nil, err
 	}
 	for _, fi := range files {
+		// skip all dot files/folders
+		if fi.Name()[0] == '.' {
+			continue
+		}
 		if fi.IsDir() {
 			subfolder, err := scanFolder(path+"/"+fi.Name(), basepath, fi.Name())
 			if err == nil {
@@ -124,7 +128,12 @@ func scanFolder(path string, basepath string, name string) (ImgFolder, error) {
 		}
 		if supportedExts.MatchString(fi.Name()) {
 			img := &imgMeta{name: fi.Name(), path: path, basepath: basepath}
-			img.meta = getMeta(img.FullPath())
+			meta := getCache(basepath, img.RelPath())
+			if meta == nil {
+				meta = getMeta(img.FullPath())
+				err = saveCache(basepath, img.RelPath(), meta)
+			} 
+			img.meta = meta
 			re.images = append(re.images, img)
 		}
 	}
