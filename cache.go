@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 const cacheFolder = ".metaimage_cache"
@@ -56,6 +57,20 @@ func saveCache(basePath, filename string, data map[string]string) error {
 	
 	_, err = file.Write(d)
 	return err
+}
+
+func CacheChangedSince(basePath string, t time.Time) bool {
+	p, err := filepath.Abs(basePath)
+	if err != nil {
+		return false
+	}
+	cFolder := fmt.Sprintf("%s/%s/.imgmeta", p, cacheFolder)
+	stat, err := os.Stat(cFolder)
+	if err != nil {
+		return false
+	}
+	
+	return stat.ModTime().After(t)
 }
 
 func SaveCacheMeta(basePath string, imf *ImgFolder) error {
