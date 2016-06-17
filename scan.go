@@ -129,7 +129,7 @@ func scanFolder(path string, basePath string, name string) (*ImgFolder, error) {
 		sort.Sort(ByImageName(re.Images))
 	}
 	if len(re.Folders) > 0 {
-		sort.Reverse(ByFolderName(re.Folders))
+		sort.Sort(sort.Reverse(ByFolderName(re.Folders)))
 	}
 	return re, nil
 }
