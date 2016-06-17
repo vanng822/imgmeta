@@ -7,6 +7,7 @@ go:
 
 install:
   - go get github.com/vanng822/imgscale/imagick
+  - go get github.com/stretchr/testify/assert
 
 
 script: go test
