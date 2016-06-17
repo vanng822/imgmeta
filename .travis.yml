@@ -6,7 +6,7 @@ go:
   - 1.6
 
 install:
-  - go install github.com/vanng822/imgscale/imagick
+  - go get github.com/vanng822/imgscale/imagick
 
 
 script: go test
